@@ -423,12 +423,31 @@ async function toggleGame(id, card, btn) {
   } else {
     shared.played[TODAY][myName] = shared.played[TODAY][myName].filter(x => x !== id);
   }
+  const game = allGames.find(g => g.id === id);
+
+if (!shared.messages) shared.messages = [];
+
+if (myChecked[id]) {
+  shared.messages.push({
+    name: "System",
+    text: `${myName} completed ${game.name} (${shared.played[TODAY][myName].length}/${allGames.length})`,
+    time: Date.now()
+  });
+}
 
   // Check first-to-finish bonus
   const myCount = shared.played[TODAY][myName].length;
-  if (myCount === allGames.length && !shared.firstAll) {
-    shared.firstAll = { name: myName, date: TODAY };
-  }
+if (myCount === allGames.length && !shared.firstAll) {
+  shared.firstAll = { name: myName, date: TODAY };
+
+  if (!shared.messages) shared.messages = [];
+
+  shared.messages.push({
+    name: "System",
+    text: `👑 ${myName} finished all games first!`,
+    time: Date.now()
+  });
+}
 
   await saveShared();
   renderLeaderboard();
