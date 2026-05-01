@@ -527,6 +527,7 @@ async function sendMsg() {
   const text = field.value.trim(); if (!text) return;
   if (!shared.messages) shared.messages = [];
   shared.messages.push({ name: myName, text, time: Date.now() });
+  await saveChatMessage(myName, text);
   if (shared.messages.length > 100) shared.messages = shared.messages.slice(-100);
   field.value = '';
   await saveShared();
@@ -563,6 +564,14 @@ function renderAll() {
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  async function saveChatMessage(name, text) {
+  await addDoc(collection(db, "messages"), {
+    name,
+    text,
+    time: Date.now()
+  });
+}
 
   window.saveMessage = async function(message) {
     await addDoc(collection(db, "messages"), {
