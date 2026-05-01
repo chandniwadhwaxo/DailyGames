@@ -423,6 +423,20 @@ async function toggleGame(id, card, btn) {
   } else {
     shared.played[TODAY][myName] = shared.played[TODAY][myName].filter(x => x !== id);
   }
+  // Auto progress update message
+const completed = shared.played[TODAY][myName].length;
+
+if (!shared.messages) shared.messages = [];
+
+shared.messages.push({
+  name: 'System',
+  text: `${myName} is now at ${completed}/${allGames.length} games`,
+  time: Date.now()
+});
+
+if (shared.messages.length > 100) {
+  shared.messages = shared.messages.slice(-100);
+}
   const game = allGames.find(g => g.id === id);
 
 if (!shared.messages) shared.messages = [];
