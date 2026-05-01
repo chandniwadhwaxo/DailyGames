@@ -543,15 +543,34 @@ function renderAll() {
   renderMessages();
 }
 </script>
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDXPIrAfyG2D4jSqf-LHKvlfeOMGya49_Q",
-  authDomain: "daily-games-80bb2.firebaseapp.com",
-  projectId: "daily-games-80bb2",
-  storageBucket: "daily-games-80bb2.firebasestorage.app",
-  messagingSenderId: "877482348988",
-  appId: "1:877482348988:web:f9e6ccf6bc13bc8d68dbb9",
-  measurementId: "G-H48MFZMHVS"
-};
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXPlrAFyG2D4jSqf-LHKVlfeOMGya49_Q",
+    authDomain: "daily-games-80bb2.firebaseapp.com",
+    projectId: "daily-games-80bb2",
+    storageBucket: "daily-games-80bb2.firebasestorage.app",
+    messagingSenderId: "877482348988",
+    appId: "1:877482348988:web:f9e6ccf6bc13bc8d68dbb9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.saveMessage = async function(message) {
+    await addDoc(collection(db, "messages"), {
+      text: message,
+      created: new Date()
+    });
+
+    alert("Saved!");
+  };
+</script>
 </body>
 </html>
