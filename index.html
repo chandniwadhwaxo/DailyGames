@@ -577,8 +577,8 @@ async function sendMsg() {
   if (shared.messages.length > 100) shared.messages = shared.messages.slice(-100);
   field.value = '';
   await saveShared();
-  renderMessages();
-}
+ renderAll();
+  }
 document.getElementById('chat-field').addEventListener('keydown', e => { if (e.key==='Enter') sendMsg(); });
 
 // ─── RENDER ALL ───────────────────────────────────────────────────────────────
