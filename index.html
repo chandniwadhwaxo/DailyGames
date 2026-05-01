@@ -249,8 +249,26 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   </div>
   <div class="portal-footer">Daily Games Portal · Shared with your crew · Resets at midnight UTC</div>
 </div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDXPIrAfyG2D4jSqf-LHKvlfeOMGya49_Q",
+  authDomain: "daily-games-80bb2.firebaseapp.com",
+  projectId: "daily-games-80bb2",
+  storageBucket: "daily-games-80bb2.firebasestorage.app",
+  messagingSenderId: "877482348988",
+  appId: "1:877482348988:web:f9e6ccf6bc13bc8d68dbb9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const TODAY = new Date().toDateString();
 const TOTAL_GAMES = 9;
@@ -286,18 +304,33 @@ let pollTimer = null;
 // ─── STORAGE ──────────────────────────────────────────────────────────────────
 async function loadShared() {
   try {
-    const r = await window.storage.get('daily_portal_v3', true);
-    if (r && r.value) shared = JSON.parse(r.value);
+    const ref = doc(db, "portal", "daily_portal_v3");
+    const snap = await getDoc(ref);
+
+    if (snap.exists()) {
+      shared = snap.data();
+    }
+
     setSynced(true);
-  } catch { setSynced(false); }
+  } catch (e) {
+    console.error(e);
+    setSynced(false);
+  }
+
   renderAll();
 }
 
 async function saveShared() {
   try {
-    await window.storage.set('daily_portal_v3', JSON.stringify(shared), true);
+    const ref = doc(db, "portal", "daily_portal_v3");
+
+    await setDoc(ref, shared);
+
     setSynced(true);
-  } catch { setSynced(false); }
+  } catch (e) {
+    console.error(e);
+    setSynced(false);
+  }
 }
 
 function saveChecked() { localStorage.setItem('portal_checked_' + TODAY, JSON.stringify(myChecked)); }
@@ -339,12 +372,7 @@ function boot() {
   updateProgress();
   renderReactions();
   loadShared();
-  pollTimer = setInterval(async () => {
-    try {
-      const r = await window.storage.get('daily_portal_v3', true);
-      if (r && r.value) { shared = JSON.parse(r.value); renderAll(); setSynced(true); }
-    } catch { setSynced(false); }
-  }, POLL_MS);
+ pollTimer = setInterval(loadShared, POLL_MS);
 }
 
 if (myName) boot();
