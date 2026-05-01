@@ -468,6 +468,7 @@ if (myCount === allGames.length && !shared.firstAll) {
   renderLeaderboard();
   renderWhoPlayed();
 }
+  window.sendMsg = sendMsg;
 
 function calcScore(name) {
   const played = (shared.played[TODAY] && shared.played[TODAY][name]) ? shared.played[TODAY][name].length : 0;
