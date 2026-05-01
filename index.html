@@ -537,6 +537,7 @@ document.getElementById('chat-field').addEventListener('keydown', e => { if (e.k
 
 // ─── RENDER ALL ───────────────────────────────────────────────────────────────
 function renderAll() {
+  loadMessages();
   updateProgress();
   renderLeaderboard();
   renderWhoPlayed();
@@ -566,6 +567,17 @@ function renderAll() {
   const db = getFirestore(app);
 
   async function saveChatMessage(name, text) {
+    async function loadMessages() {
+  const snapshot = await getDocs(collection(db, "messages"));
+
+  shared.messages = [];
+
+  snapshot.forEach((doc) => {
+    shared.messages.push(doc.data());
+  });
+
+  renderMessages();
+}
   await addDoc(collection(db, "messages"), {
     name,
     text,
