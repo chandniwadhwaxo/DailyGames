@@ -242,8 +242,7 @@ min-height: 42px; }
           <div class="reactions-strip" id="reactions-strip"></div>
           <div class="chat-input-row">
            <textarea class="chat-field" id="chat-field" placeholder="Share your score…" maxlength="300"></textarea>
-            <button class="chat-send" onclick="sendMsg()">Send</button>
-          </div>
+<button class="chat-send" id="chat-send-btn">Send</button>          </div>
         </div>
       </div>
     </div>
@@ -601,8 +600,14 @@ async function sendMsg() {
   await saveShared();
  renderAll();
   }
-document.getElementById('chat-field').addEventListener('keydown', e => { if (e.key==='Enter') sendMsg(); });
+document.getElementById('chat-field').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMsg();
+  }
+});
 
+document.getElementById('chat-send-btn').addEventListener('click', sendMsg);
 // ─── RENDER ALL ───────────────────────────────────────────────────────────────
 function renderAll() {
   updateProgress();
