@@ -174,7 +174,7 @@ min-height: 42px; }
     <div class="onboard-sub">Your crew's daily puzzle hub</div>
     <div class="onboard-label">What's your name?</div>
     <input class="onboard-input" id="onboard-name" placeholder="e.g. Jordan" maxlength="18" autofocus />
-<button class="onboard-btn" onclick="joinPortal()">Enter Portal →</button>   <div class="onboard-note">Your name is saved on this device.<br>Progress and chat is shared with your crew in real time.</div>
+<button class="onboard-btn" id="join-btn">Enter Portal →</button>   <div class="onboard-note">Your name is saved on this device.<br>Progress and chat is shared with your crew in real time.</div>
   </div>
 </div>
 
@@ -343,10 +343,16 @@ function setSynced(ok) {
 function joinPortal() {
   const val = document.getElementById('onboard-name').value.trim();
   if (!val) return;
+
   myName = val;
   localStorage.setItem('portal_name', myName);
   boot();
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('join-btn').addEventListener('click', joinPortal);
+});
+
 function changeName() {
   const val = prompt('Change your display name:', myName);
   if (val && val.trim()) {
@@ -356,7 +362,9 @@ function changeName() {
   }
 }
 
-document.getElementById('onboard-name').addEventListener('keydown', e => { if (e.key==='Enter') joinPortal(); });
+document.getElementById('onboard-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') joinPortal();
+});
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 function boot() {
