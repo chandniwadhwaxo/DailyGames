@@ -128,7 +128,8 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .rxn-btn { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all .15s; }
 .rxn-btn:hover { border-color: var(--accent); color: var(--accent2); }
 .chat-input-row { display: flex; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--border); }
-.chat-field { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12px; color: var(--text); font-family: 'DM Mono', monospace; outline: none; transition: border-color .15s; }
+.chat-field { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12px; color: var(--text); font-family: 'DM Mono', monospace; outline: none; transition: border-color .15s; resize: none;
+min-height: 42px; }
 .chat-field:focus { border-color: var(--accent); }
 .chat-send { background: var(--accent); border: none; border-radius: var(--radius-sm); padding: 7px 16px; font-size: 12px; color: #fff; cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 600; transition: opacity .15s; flex-shrink: 0; }
 .chat-send:hover { opacity: .85; }
@@ -240,7 +241,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
           </div>
           <div class="reactions-strip" id="reactions-strip"></div>
           <div class="chat-input-row">
-            <input class="chat-field" id="chat-field" placeholder="Share your score…" maxlength="140" />
+           <textarea class="chat-field" id="chat-field" placeholder="Share your score…" maxlength="300"></textarea>
             <button class="chat-send" onclick="sendMsg()">Send</button>
           </div>
         </div>
